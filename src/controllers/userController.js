@@ -1,7 +1,8 @@
+const userModel = require("../models/userModel");
 const UserModel = require("../models/userModel");
 
 const validation = require("../validation/validator")
-
+const jwt = require("jsonwebtoken")
 
 
 //=======================================================///
@@ -81,4 +82,33 @@ const registerUser = async function (req, res) {
 };
 
 
-module.exports.registerUser = registerUser
+const userLogin = async function(req , res){
+  try{
+
+  let data = req.body ;
+
+  if (!validation.isValidRequestBody(data)) {
+    return res.status(400).send({status: false,message: "please enter login credential (email and password)"});
+  }
+
+  const {email , password}=data;
+  if (!validation.isValid(email)) return res.status(400).send({ status: false, message: "Please enter the emailId" })
+    if (!validation.isValid(password)) return res.status(400).send({ status: false, message: "Please enter the password" })
+
+    if (!validation.isValidEmail(email)) return res.status(400).send({ status: false, message: "Please enter the valid emailId" })
+    if (!validation.isValidPassword(password)) return res.status(400).send({ status: false, message: "Please enter the valid password" })
+
+    const loginUser = await userModel.findOne({email , password});
+    if (!loginUser) return res.status(404).send({status : false , msg : "email and password not found"});
+
+
+    const token = await jwt.sign({userID :loginUser._id, group:"group20", iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 20 * 60 * 60},"project3group20");
+    res.setHeader("x-api-key", token);
+    res.status(200).send({status : true , msg : "user successfully loged in ", data : token})
+}catch(err){ return res.status(500).send({status : false , msg: err.message})
+}
+}
+
+module.exports.registerUser = registerUser;
+module.exports.userLogin = userLogin;
