@@ -1,25 +1,8 @@
 const UserModel = require("../models/userModel");
 
-//=========================================//
+const validation = require("../validation/validator")
 
-const isValid = function (value) {
-  if (typeof value == "undefined" || value == null) return false;
-  if (typeof value == "string" && value.trim().length > 0) return true;
-};
 
-const isValidRequestBody = function (object) {
-  return Object.keys(object).length > 0;
-};
-
-const isValidEmail = function (email) {
-  const regexForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return regexForEmail.test(email);
-};
-
-const isValidPhone = function (phone) {
-  const regexForMobile = /^[6-9]\d{9}$/;
-  return regexForMobile.test(phone);
-};
 
 //=======================================================///
 
@@ -28,33 +11,33 @@ const isValidPhone = function (phone) {
 const registerUser = async function (req, res) {
   try {
     const requestBody = req.body;
+    const { title, name, phone, email, password, address } = requestBody;
 
-    if (!isValidRequestBody(requestBody)) {
-      return res.status(400).send({status: false,message: "user data is required to create a new user", });
+
+    if (!validation.isValidRequestBody(requestBody)) {
+      return res.status(400).send({status: false,message: "user data is required to create a new user"});
+    }
+    if (!validation.isValid(title)) {
+      return res.status(400).send({status: false,message: `title is required`});
+    }
+    if(!validation.isValidTitle) return res.status(400).send({status:false , msg :"title only take mrs , mr , miss"}) 
+
+    if (!validation.isValid(name)) {
+      return res.status(400).send({status: false, message: `name is required `});
+    }
+
+    if (!validation.isValidName(name)) {
+      return res.status(400).send({status: false, message: `name is only  take alphabates`});
+    }
+
+
+    if (!validation.isValid(phone)) {
+      return res.status(400).send({ status: false, message: "mobile number is required"});
     }
 
     
-    const { title, name, phone, email, password, address } = requestBody;
-
-    if (!isValid(title)) {
-      return res.status(400).send({status: false,message: `title is required and should be valid format like: Mr/Mrs/Miss`,});
-    }
-
-    if (!["Mr", "Mrs", "Miss"].includes(title.trim())) {
-      return res.status(400).send({status: false,message: `title must be provided from these values: Mr/Mrs/Miss`, });
-    }
-
-    if (!isValid(name)) {
-      return res.status(400).send({status: false, message: `name is required and should be in valid format like : JOHN`,});
-    }
-
-    if (!isValid(phone)) {
-      return res.status(400).send({ status: false, message: "mobile number is required" });
-    }
-
-    if (!isValidPhone(phone)) {
-      return res.status(400).send({status: false,message:" please enter a valid 10 digit mobile number withoutcountrycodeand 0",
-        });
+    if (!validation.isValidPhone(phone)) {
+      return res.status(400).send({status: false,message:" please enter a valid 10 digit mobile number"});
     }
 
     const isPhoneUnique = await UserModel.findOne({ phone });
@@ -63,11 +46,11 @@ const registerUser = async function (req, res) {
       return res.status(400).send({status: false, message: `mobile number: ${phone} already exist`, });
     }
 
-    if (!isValid(email)) {
+    if (!validation.isValid(email)) {
       return res.status(400).send({ status: false, message: "email address is required" });
     }
 
-    if (!isValidEmail(email)) {
+    if (!validation.isValidEmail(email)) {
       return res.status(400).send({status: false,message: " please enter a valid email address", });
     }
 
@@ -77,21 +60,17 @@ const registerUser = async function (req, res) {
       return res.status(400).send({ status: false, message: `email: ${email} already exist` });
     }
 
-    if (!isValid(password)) {
+    if (!validation.isValid(password)) {
       return res.status(400).send({ status: false, message: "password is required" });
     }
 
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(password)) {
-      return res.status(400).send({status: false,message: "password should be: 8 to 15 characters, at least one letter and one number ",});
+    if (!validation.isValidPassword(password)) {
+      return res.status(400).send({ status: false, message: "please enter valid password" });
     }
-   /* const userData = {
-      title: title.trim(),
-      name: name.trim(),
-      phone: phone.trim(),
-      email: email.trim(),
-      password: password,
-      address : address
-    };*/
+
+    if (!validation.isValid(address)) {
+      return res.status(400).send({ status: false, message: "please enter address" });
+    }
 
     const newUser = await UserModel.create(requestBody);
 
