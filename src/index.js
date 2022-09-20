@@ -1,11 +1,8 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const route = require('./route/routes.js');
 const { default: mongoose } = require('mongoose');
 const app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 mongoose.connect("mongodb+srv://sonupk:1HivF6DXHWanVcYu@cluster0.vtjazgb.mongodb.net/group20Database", {
     useNewUrlParser: true
