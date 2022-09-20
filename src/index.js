@@ -9,6 +9,7 @@ mongoose.connect("mongodb+srv://sonupk:1HivF6DXHWanVcYu@cluster0.vtjazgb.mongodb
 })
 .then( () => console.log("MongoDb is connected"))
 .catch ( err => console.log(err) )
+//some
 
 
 app.use('/', route)
