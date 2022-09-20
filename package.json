@@ -1,0 +1,19 @@
+{
+  "name": "project---books-management",
+  "version": "1.0.0",
+  "description": "\\",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ritwikdevil/Project---Books-Management.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ritwikdevil/Project---Books-Management/issues"
+  },
+  "homepage": "https://github.com/Ritwikdevil/Project---Books-Management#readme"
+}
