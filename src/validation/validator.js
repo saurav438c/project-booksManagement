@@ -39,8 +39,19 @@ const isValidPassword = function (password) {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
     return passwordRegex.test(password)
 }
+//_________________________________________ISBN Validation_________________________________________
+const isValidISBN =function (ISBN){
+  const ISBNRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
+  return ISBNRegex.test(ISBN)
+}
+//_________________________________________Date Validation_________________________________________
+const isValidDate =function(date){
+  const dateRegex = /^\d{4}-(02-(0[1-9]|[12][0-9])|(0[469]|11)-(0[1-9]|[12][0-9]|30)|(0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))$/
+  return dateRegex.test(date)
+}
+
 //_________________________________________exporting part_________________________________________
-module.exports = {isValid,isValidRequestBody, isValidEmail, isValidPhone, isValidName ,isValidTitle,isValidPassword }
+module.exports = {isValid,isValidRequestBody, isValidEmail, isValidPhone, isValidName ,isValidTitle,isValidPassword,isValidISBN,isValidDate }
 
 
 
