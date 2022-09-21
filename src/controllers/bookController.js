@@ -16,6 +16,7 @@ const createBook = async function (req, res) {
 
          // Validate title
     if (!validation.isValid(title)) return res.status(400).send({ status: false, message: "Book title is required" });
+    if(!validation.isValidName(title))return res.status(400).send({status : false , message : "title shoud be in alphabates"})
 
     const uniqueTitle = await bookModel.findOne({ title });
     if (uniqueTitle) return res.status(400).send({ status: false, message: "Title already exists" });
@@ -42,6 +43,7 @@ const createBook = async function (req, res) {
         if (!validation.isValidName(category)) return res.status(400).send({ status: false, message: "Category is not valid(Should cointain alphabets only)" });
          //Validate subcategory
          if (!validation.isValid(subcategory)) return res.status(400).send({ status: false, message: "Subcategory is required" });
+         if (!validation.isValidName(subcategory)) return res.status(400).send({ status: false, message: "SubCategory is not valid(Should cointain alphabets only)" });
          //Validate releasedAt
         if (!validation.isValid(releasedAt)) return res.status(400).send({ status: false, message: "Release date is Required" })
         if (!validation.isValidDate(releasedAt)) return res.status(400).send({ status: false, message: "Date should be valid & format will YYYY-MM-DD" })
@@ -57,3 +59,5 @@ const createBook = async function (req, res) {
          res.status(500).send({ msg: err.message });
     }
 }
+
+module.exports.createBook =createBook;
