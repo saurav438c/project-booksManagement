@@ -17,7 +17,7 @@ router.post('/login', UserController.userLogin)//user login
 //_________________________________________Book Api's _________________________________________
 router.post("/books",middleware.mid1,  bookController.createBook)
 
-
+router.get ("/books",middleware.mid1, bookController.getBook)
 
 
 

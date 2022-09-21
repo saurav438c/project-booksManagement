@@ -60,4 +60,39 @@ const createBook = async function (req, res) {
     }
 }
 
+const getBook = async function (req, res) {
+try {
+ const userQuery = req.query;
+ const filterBook = {isDeleted : false} ; 
+ const {userId ,category , subcategory}= userQuery;
+ 
+ if(!ObjectId.isValid(userId)) return res.status(400).send({ status: false, message: "Invalid UserId" });
+
+ filterBook["userId"]=userId;
+
+ if(validation.isValid(category))
+ {
+    filterBook["category"]=category;
+ }
+ if(validation.isValid(subcategory))
+ {
+    filterBook["subcategory"]=subcategory;
+ }
+    
+const findBook = await bookModel.find(filterBook).select({title:1 ,excerpt:1 , userId:1 , category :1 ,reviews :1, releasedAt :1});
+if (findBook.length == 0) return res.status(404).send({ status: false, message: "Book not found" });
+
+const sortBook = findBook.sort({title:1})
+   return res.status(404).send({ status: false, message: "Book List", data : sortBook });
+
+
+
+} catch (err) {
+     res.status(500).send({ msg: err.message });
+}
+    
+}
+
+
 module.exports.createBook =createBook;
+module.exports.getBook =getBook
