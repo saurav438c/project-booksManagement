@@ -94,7 +94,7 @@ const userLogin = async function(req , res){
     if (!loginUser) return res.status(404).send({status : false , msg : "email and password not found"});
 
 //-----------------------------------token creation part here:-------------------------------------------
-    const token = await jwt.sign({userID :loginUser._id, group:"group20", iat: Math.floor(Date.now() / 1000),
+    const token = await jwt.sign({userId :loginUser._id, group:"group20", iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 20 * 60 * 60},"project3group20");
  // -------------------------Set header------------------------
     res.setHeader("x-api-key", token);

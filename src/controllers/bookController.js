@@ -50,7 +50,7 @@ const createBook = async function (req, res) {
 
           // Can't Set deleted true at creation time
           if (isDeleted == true) return res.status(400).send({ status: false, message: "You can't add this key at book creation time." })
-
+          
           const savedBook = await bookModel.create(data);
           return res.status(201).send({ status: true, message: "Book Created Successfully", data: savedBook });
 
@@ -63,19 +63,33 @@ const createBook = async function (req, res) {
 const getBook = async function (req, res) {
 try {
  const userQuery = req.query;
+ getFilter = Object.keys(userQuery)
+    if (getFilter.length) {
+      for (let value of getFilter) {
+        if (['category', 'userId', 'subcategory'].indexOf(value) == -1)
+          return res.status(400).send({ status: false, message: `You can't filter Using '${value}' ` })
+      }
+    }
+
  const filterBook = {isDeleted : false} ; 
  const {userId ,category , subcategory}= userQuery;
  if(userId){
     if(!ObjectId.isValid(userId)) 
     {
         return res.status(400).send({ status: false, message: "Invalid UserId" });
+        
     }
     else {
-        filterBook["userId"] = userId;
+        const finduserId= await userModel.findById(userId)
+        if(!finduserId) return res.status(404).send ({status:false,msg: "user id is not present in  user collection"})
+        else{
+             filterBook["userId"] = userId;
+        }
+       
     }
     
  }
-
+ 
  if(validation.isValid(category))
  {
     filterBook["category"]=category;
@@ -90,7 +104,7 @@ const findBook = await bookModel.find(filterBook).select({title:1 ,excerpt:1 , u
 if (findBook.length == 0) return res.status(404).send({ status: false, message: "Book not found" });
 
 const sortBook =  findBook.sort((a, b) => a.title.localeCompare(b.title)); //using arrow function  and local compare function
-   return res.status(200).send({ status: false, message: "Book List", data : sortBook });
+   return res.status(200).send({ status: true, message: "Book List", data : sortBook });
 
 } catch (err) {
      res.status(500).send({ msg: err.message });

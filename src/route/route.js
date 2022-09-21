@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const UserController = require('../controllers/userController')
 const bookController = require("../controllers/bookController")
-const middleware = require("../Middlewares/auth")
+const {mid1,mid2} = require("../Middlewares/auth")
 
 
 ///_________________________________________test api_________________________________________
@@ -15,9 +15,9 @@ router.post('/register', UserController.registerUser)// user creation
 router.post('/login', UserController.userLogin)//user login
 
 //_________________________________________Book Api's _________________________________________
-router.post("/books",middleware.mid1,  bookController.createBook)
+router.post("/books",mid1,mid2,bookController.createBook)
 
-router.get ("/books",middleware.mid1, bookController.getBook)
+router.get ("/books",mid1, bookController.getBook)
 
 
 
