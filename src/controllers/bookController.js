@@ -65,10 +65,16 @@ try {
  const userQuery = req.query;
  const filterBook = {isDeleted : false} ; 
  const {userId ,category , subcategory}= userQuery;
- 
- if(!ObjectId.isValid(userId)) return res.status(400).send({ status: false, message: "Invalid UserId" });
-
- filterBook["userId"]=userId;
+ if(userId){
+    if(!ObjectId.isValid(userId)) 
+    {
+        return res.status(400).send({ status: false, message: "Invalid UserId" });
+    }
+    else {
+        filterBook["userId"] = userId;
+    }
+    
+ }
 
  if(validation.isValid(category))
  {
@@ -79,13 +85,12 @@ try {
     filterBook["subcategory"]=subcategory;
  }
     
-const findBook = await bookModel.find(filterBook).select({title:1 ,excerpt:1 , userId:1 , category :1 ,reviews :1, releasedAt :1});
+const findBook = await bookModel.find(filterBook).select({title:1 ,excerpt:1 , userId:1 , category :1 ,reviews :1, releasedAt :1})
+
 if (findBook.length == 0) return res.status(404).send({ status: false, message: "Book not found" });
 
-const sortBook = findBook.sort({title:1})
-   return res.status(404).send({ status: false, message: "Book List", data : sortBook });
-
-
+const sortBook =  findBook.sort((a, b) => a.title.localeCompare(b.title)); //using arrow function  and local compare function
+   return res.status(200).send({ status: false, message: "Book List", data : sortBook });
 
 } catch (err) {
      res.status(500).send({ msg: err.message });
