@@ -210,8 +210,31 @@ const updateBook = async function (req, res) {
     }
 }
 
+const deleteBooks = async function (req, res) {
+    try {
+        let bookId = req.params.bookId;
+        if (!ObjectId.isValid(bookId)) {
+            return res.status(400).send({ status: false, message: "Incorrect BookId format" });
+        }
+        let book = await bookModel.findOne({ _id: bookId, isDeleted: false })
+        if (!book) {
+            return res.status(404).send({ status: false, message: "book not found" })
+        }
+       
+         const deleteBook = await bookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt:new Date() } }, { new: true }) 
+            return res.status(200).send({ status: true, message: "Book Successfully deleted",data : deleteBook }) 
+
+    
+        }
+        
+
+    catch (err) {
+        return res.status(500).send({ status: false, message: err.message })
+    }
+}
 
 module.exports.createBook = createBook;
 module.exports.getBook = getBook
 module.exports.getReviewsBook = getReviewsBook
-module.exports.updateBook = updateBook
+module.exports.updateBook = updateBook;
+module.exports.deleteBooks =deleteBooks
