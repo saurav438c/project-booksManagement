@@ -20,6 +20,8 @@ router.post("/books", mid1, mid2, bookController.createBook)
 router.get("/books", mid1, bookController.getBook)
 router.get("/books/:bookId", mid1, bookController.getReviewsBook)
 
+router.put("/books/:bookId",mid1,mid2,bookController.updateBook)
+
 
 
 
