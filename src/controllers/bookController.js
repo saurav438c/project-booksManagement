@@ -187,16 +187,16 @@ const updateBook = async function (req, res) {
         if (excerpt == "") {
             return res.status(400).send({ status: false, message: "excerpt cant empty" })
         }
-        else if (excerpt) {
-            if (!validation.isValid(excerpt))
-                return res.status(400).send({ status: false, message: "excerpt is invalid " });
-        }
+        // else if (excerpt) {
+        //     if (!validation.isValid(excerpt))
+        //         return res.status(400).send({ status: false, message: "excerpt is invalid " });
+        // }
         //...................for released at.............
         if (releasedAt == "") {
             return res.status(400).send({ status: false, message: "releasedAt cant empty" })
         }
         else if (releasedAt) {
-            if (!validation.isValid(releasedAt))
+            if (!validation.isValidDate(releasedAt))
                 return res.status(400).send({ status: false, message: "releasedAt is invalid " });
         }
         const updateDetails = await bookModel.findOneAndUpdate({ _id: bookId }, data, { new: true })
