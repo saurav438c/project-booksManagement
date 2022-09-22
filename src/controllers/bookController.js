@@ -144,72 +144,74 @@ const getReviewsBook = async function (req, res) {
 
 }
 
- const updateBook = async function(req, res){
-    try{
-        console.log("abc")
-        const bookId=req.params.bookId
-        const data=req.body
-       let{title,excerpt,ISBN,releasedAt,} = data;
-        if(!ObjectId.isValid(bookId)) return res.status(400).send({ status: false, message: "Invalid bookId"});
-        //console.log("abc")
-        const findBook=await bookModel.findOne({_id:bookId,isDeleted:false})
+const updateBook = async function (req, res) {
+    try {
+
+        const bookId = req.params.bookId
+        const data = req.body
         
-        if(!findBook) return res.status(404).send({ status: false, message: "Book not found"});
+        if (!ObjectId.isValid(bookId)) return res.status(400).send({ status: false, message: "Invalid bookId" });
 
-        if(!validation.isValidRequestBody(data)) return res.status(400).send({ status: false, message: "Please enter details to update the book"});
+        const findBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
+
+        if (!findBook) return res.status(404).send({ status: false, message: "Book not found" });
+
+        const { title, excerpt, ISBN, releasedAt, } = data;
+
+        if (!validation.isValidRequestBody(data)) return res.status(400).send({ status: false, message: "Please enter details to update the book" });
         //...........for title............
-if(title=="") {
-    return res.status(400).send({ status:false,message:"title cant empty"})
-}
-else if(title){
-if(!validation.isValid(title) || !validation.isValidName(title))
-return res.status(400).send({ status: false, message: "title is invalid or only take alphabetes"});
+        if (title == "") {
+            return res.status(400).send({ status: false, message: "title cant empty" })
+        }
+        else if (title) {
+            if (!validation.isValid(title) || !validation.isValidName(title))
+                return res.status(400).send({ status: false, message: "title is invalid or only take alphabetes" });
 
-const uniqueTitle = await bookModel.findOne({ title });
-        if (uniqueTitle) return res.status(400).send({ status: false, message: "Title already exists" });
+            const uniqueTitle = await bookModel.findOne({ title });
+            if (uniqueTitle) return res.status(400).send({ status: false, message: "Title already exists" });
 
-}
-//...............for ISBN.................
-if(ISBN=="") {
-    return res.status(400).send({ status:false,message:"ISBN cant be empty"})
-}
-else if(ISBN){
-    if(!validation.isValid(ISBN) || !validation.isValidISBN(ISBN))
-return res.status(400).send({ status: false, message: "ISBN is invalid or only take 10 or 13 digit numbers"});
+        }
+        //...............for ISBN.................
+        if (ISBN == "") {
+            return res.status(400).send({ status: false, message: "ISBN cant be empty" })
+        }
+        else if (ISBN) {
+            if (!validation.isValid(ISBN) || !validation.isValidISBN(ISBN))
+                return res.status(400).send({ status: false, message: "ISBN is invalid or only take 10 or 13 digit numbers" });
 
-const uniqueISBN = await bookModel.findOne({ ISBN });
-        if (uniqueISBN) return res.status(400).send({ status: false, message: "ISBN already exists" });
-}
-//....................excerprt......................
+            const uniqueISBN = await bookModel.findOne({ ISBN });
+            if (uniqueISBN) return res.status(400).send({ status: false, message: "ISBN already exists" });
+        }
+        //....................excerprt......................
 
-if(excerpt=="") {
-    return res.status(400).send({ status:false,message:"excerpt cant empty"})
-}
-else if(excerpt){
-    if(!validation.isValid(excerpt) )
-return res.status(400).send({ status: false, message: "excerpt is invalid "});
-}
-//...................for released at.............
-if(releasedAt=="") {
-    return res.status(400).send({ status:false,message:"releasedAt cant empty"})
-}
-else if(releasedAt){
-    if(!validation.isValid(releasedAt) )
-return res.status(400).send({ status: false, message: "releasedAt is invalid "});
-}
-const updateDetails= await bookModel.findOneAndUpdate({_id:bookId} ,data,{new:true})
-return res.status(200).send({ status: false, message: " book updated successfully ",data:updateDetails});
-}
-catch (err) {
-    
-   return res.status(500).send({ status: false, message: err });
+        if (excerpt == "") {
+            return res.status(400).send({ status: false, message: "excerpt cant empty" })
+        }
+        else if (excerpt) {
+            if (!validation.isValid(excerpt))
+                return res.status(400).send({ status: false, message: "excerpt is invalid " });
+        }
+        //...................for released at.............
+        if (releasedAt == "") {
+            return res.status(400).send({ status: false, message: "releasedAt cant empty" })
+        }
+        else if (releasedAt) {
+            if (!validation.isValid(releasedAt))
+                return res.status(400).send({ status: false, message: "releasedAt is invalid " });
+        }
+        const updateDetails = await bookModel.findOneAndUpdate({ _id: bookId }, data, { new: true })
+        return res.status(200).send({ status: false, message: " book updated successfully ", data: updateDetails });
+    }
+    catch (err) {
 
-    
+        return res.status(500).send({ status: false, message: err });
+
+
+    }
 }
- }
- 
+
 
 module.exports.createBook = createBook;
 module.exports.getBook = getBook
 module.exports.getReviewsBook = getReviewsBook
-module.exports.updateBook= updateBook
+module.exports.updateBook = updateBook

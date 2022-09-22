@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
+const bookModel = require("../models/bookModel");
 
 
 //Authentication
@@ -50,7 +51,7 @@ const mid2 = async function (req, res, next) {
             return next()
         }
         else {
-            return res.status(403).send({ status: false, message: "userId is mandatory" })
+            return res.status(403).send({ status: false, message: "bookId is mandatory" })
         }
 
     } catch (err) {
