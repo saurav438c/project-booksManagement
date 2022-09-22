@@ -200,7 +200,7 @@ const updateBook = async function (req, res) {
                 return res.status(400).send({ status: false, message: "releasedAt is invalid " });
         }
         const updateDetails = await bookModel.findOneAndUpdate({ _id: bookId }, data, { new: true })
-        return res.status(200).send({ status: false, message: " book updated successfully ", data: updateDetails });
+        return res.status(200).send({ status: true, message: " book updated successfully ", data: updateDetails });
     }
     catch (err) {
 
