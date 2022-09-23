@@ -26,7 +26,18 @@ router.delete("/books/:bookId",mid1,mid2,bookController.deleteBooks)
 //_________________________________________Review API_________________________________________
 
 router.post("/books/:bookId/review", reviewController.createReview)
+router.put("/books/:bookId/review/:reviewId",reviewController.updateReview)
 
+
+
+
+
+
+
+router.all("/*/", async function (req, res){
+
+    res.status(404).send({status:false, msg: "Wrong url"})
+})
 
 
 
