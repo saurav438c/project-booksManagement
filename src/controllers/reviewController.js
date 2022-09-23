@@ -60,7 +60,7 @@ const createReview = async function (req, res) {
         const bookWithReview = updatingReviewCount.toObject()
         bookWithReview['reviewsData'] = reviewList
 
-        res.status(201).send({ status: true, messege: "Review Successful", data: bookWithReview })
+         return res.status(201).send({ status: true, messege: " Created Review Successful", data: bookWithReview })
 
 
     } catch (err) {
@@ -117,7 +117,7 @@ const updateReview =async function (req,res){
         const updatedBookReview= findBook.toObject()
         updatedBookReview["reviewsData"]=updatedReview
 
-        res.status(200).send({ status: true, messege: " updated Review Successful", data: updatedBookReview })
+        return res.status(200).send({ status: true, messege: " updated Review Successful", data: updatedBookReview })
 
         
      } catch (err) {
@@ -127,9 +127,36 @@ const updateReview =async function (req,res){
 
     
 }
+const deleteReview = async function(req,res){
+    try {
+        const bookId= req.params.bookId
+        const reviewId= req.params.reviewId
+        
+
+        if (!ObjectId.isValid(bookId)) return res.status(400).send({ status: false, messege: "Not a valid Book id in url" });
+
+        if (!ObjectId.isValid(reviewId)) return res.status(400).send({ status: false, messege: "Not a valid review id in url" });
+        // find book
+        const findBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
+        if (!findBook) return res.status(404).send({ status: false, message: "No book found" })
+        //find review
+        const findreview = await reviewModel.findOne({ _id: reviewId, isDeleted: false })
+        if (!findreview) return res.status(404).send({ status: false, message: "No review found" })
+
+         await reviewModel.findOneAndUpdate({_id:reviewId},{isDeleted:true})
+         await bookModel.findOneAndUpdate({_id:bookId},{$inc:{reviews:-1}})
+         return res.status(200).send({ status: true, messege: " Deleted Review Successful" })
+
+
+        } catch (err) {
+        return res.status(500).send({ status: false, messege: err.message })
+        
+    }
+}
 
 
 
 
 module.exports.createReview = createReview
 module.exports.updateReview = updateReview
+module.exports.deleteReview = deleteReview

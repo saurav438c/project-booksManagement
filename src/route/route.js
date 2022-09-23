@@ -27,6 +27,7 @@ router.delete("/books/:bookId",mid1,mid2,bookController.deleteBooks)
 
 router.post("/books/:bookId/review", reviewController.createReview)
 router.put("/books/:bookId/review/:reviewId",reviewController.updateReview)
+router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
 
 
 
