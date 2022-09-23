@@ -143,22 +143,25 @@ const getReviewsBook = async function (req, res) {
     }
 
 }
-
+//===================================================Update Book By bookId======================
 const updateBook = async function (req, res) {
     try {
 
         const bookId = req.params.bookId
         const data = req.body
-        
+
+        // Id Validation
         if (!ObjectId.isValid(bookId)) return res.status(400).send({ status: false, message: "Invalid bookId" });
 
+        // Finding Books
         const findBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
-
         if (!findBook) return res.status(404).send({ status: false, message: "Book not found" });
 
+        // Destructuring
         const { title, excerpt, ISBN, releasedAt, } = data;
 
         if (!validation.isValidRequestBody(data)) return res.status(400).send({ status: false, message: "Please enter details to update the book" });
+
         //...........for title............
         if (title == "") {
             return res.status(400).send({ status: false, message: "title cant empty" })
@@ -182,7 +185,7 @@ const updateBook = async function (req, res) {
             const uniqueISBN = await bookModel.findOne({ ISBN });
             if (uniqueISBN) return res.status(400).send({ status: false, message: "ISBN already exists" });
         }
-        //....................excerprt......................
+        //.................... for excerprt......................
 
         if (excerpt == "") {
             return res.status(400).send({ status: false, message: "excerpt cant empty" })
@@ -191,6 +194,7 @@ const updateBook = async function (req, res) {
         //     if (!validation.isValid(excerpt))
         //         return res.status(400).send({ status: false, message: "excerpt is invalid " });
         // }
+
         //...................for released at.............
         if (releasedAt == "") {
             return res.status(400).send({ status: false, message: "releasedAt cant empty" })
@@ -199,35 +203,36 @@ const updateBook = async function (req, res) {
             if (!validation.isValidDate(releasedAt))
                 return res.status(400).send({ status: false, message: "releasedAt is invalid " });
         }
+
+        // Final data Updation
         const updateDetails = await bookModel.findOneAndUpdate({ _id: bookId }, data, { new: true })
         return res.status(200).send({ status: true, message: " book updated successfully ", data: updateDetails });
     }
     catch (err) {
-
-        return res.status(500).send({ status: false, message: err });
-
-
+        return res.status(500).send({ status: false, message: err.message });
     }
 }
 
+//=====================Delete book by bookid============================================
 const deleteBooks = async function (req, res) {
     try {
         let bookId = req.params.bookId;
+
+        // Id validation
         if (!ObjectId.isValid(bookId)) {
             return res.status(400).send({ status: false, message: "Incorrect BookId format" });
         }
+        
+        // Finding the book
         let book = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!book) {
             return res.status(404).send({ status: false, message: "book not found" })
         }
-       
-         const deleteBook = await bookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt:new Date() } }, { new: true }) 
-            return res.status(200).send({ status: true, message: "Book Successfully deleted",data : deleteBook }) 
-
-    
-        }
         
-
+        // Book delete
+        const deleteBook = await bookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
+        return res.status(200).send({ status: true, message: "Book Successfully deleted", data: deleteBook })
+    }
     catch (err) {
         return res.status(500).send({ status: false, message: err.message })
     }
@@ -237,4 +242,4 @@ module.exports.createBook = createBook;
 module.exports.getBook = getBook
 module.exports.getReviewsBook = getReviewsBook
 module.exports.updateBook = updateBook;
-module.exports.deleteBooks =deleteBooks
+module.exports.deleteBooks = deleteBooks
