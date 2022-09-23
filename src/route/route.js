@@ -23,6 +23,10 @@ router.get("/books/:bookId", mid1, bookController.getReviewsBook)
 router.put("/books/:bookId",mid1,mid2,bookController.updateBook)
 router.delete("/books/:bookId",mid1,mid2,bookController.deleteBooks)
 
+//_________________________________________Review API_________________________________________
+
+router.post("/books/:bookId/review", reviewController.createReview)
+
 
 
 

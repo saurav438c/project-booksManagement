@@ -50,8 +50,15 @@ const isValidDate = function (date) {
   return dateRegex.test(date)
 }
 
+//_________________________________________Rating validation_________________________________________
+const isValidRating = function (rating) {
+  const ratingRegex = /^[\1-5]*$/
+  return ratingRegex.test(rating)
+}
+
+
 //_________________________________________exporting part_________________________________________
-module.exports = { isValid, isValidRequestBody, isValidEmail, isValidPhone, isValidName, isValidTitle, isValidPassword, isValidISBN, isValidDate }
+module.exports = { isValid, isValidRequestBody, isValidEmail, isValidPhone, isValidName, isValidTitle, isValidPassword, isValidISBN, isValidDate,isValidRating }
 
 
 
