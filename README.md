@@ -4,12 +4,12 @@
 
 ### Key points
 - Create a group database `groupXDatabase`. You can clean the db you previously used and resue that.
-- This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention `project/booksManagementGroupX`
+- This time each group should have a *single git branch*. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention `project/booksManagementGroupX`
 - Follow the naming conventions exactly as instructed.
 
 ### Models
 - User Model
-yaml
+```yaml
 { 
   title: {string, mandatory, enum[Mr, Mrs, Miss]},
   name: {string, mandatory},
@@ -24,17 +24,17 @@ yaml
   createdAt: {timestamp},
   updatedAt: {timestamp}
 }
-
+```
 
 - Books Model
-yaml
+```yaml
 { 
   title: {string, mandatory, unique},
   excerpt: {string, mandatory}, 
   userId: {ObjectId, mandatory, refs to user model},
   ISBN: {string, mandatory, unique},
   category: {string, mandatory},
-  subcategory: [string, mandatory],
+  subcategory: {string, mandatory},
   reviews: {number, default: 0, comment: Holds number of reviews of this book},
   deletedAt: {Date, when the document is deleted}, 
   isDeleted: {boolean, default: false},
@@ -42,10 +42,10 @@ yaml
   createdAt: {timestamp},
   updatedAt: {timestamp},
 }
-
+```
 
 - Review Model (Books review)
-yaml
+```yaml
 {
   bookId: {ObjectId, mandatory, refs to book model},
   reviewedBy: {string, mandatory, default 'Guest', value: reviewer's name},
@@ -54,7 +54,7 @@ yaml
   review: {string, optional}
   isDeleted: {boolean, default: false},
 }
-
+```
 
 ## User APIs 
 ### POST /register
@@ -146,7 +146,7 @@ Refer below sample
 ## Response
 
 ### Successful Response structure
-yaml
+```yaml
 {
   status: true,
   message: 'Success',
@@ -154,18 +154,18 @@ yaml
 
   }
 }
-
+```
 ### Error Response structure
-yaml
+```yaml
 {
   status: false,
   message: ""
 }
-
+```
 
 ## Collections
 ## users
-yaml
+```yaml
 {
   _id: ObjectId("88abc190ef0288abc190ef02"),
   title: "Mr",
@@ -181,9 +181,9 @@ yaml
   "createdAt": "2021-09-17T04:25:07.803Z",
   "updatedAt": "2021-09-17T04:25:07.803Z",
 }
-
+```
 ### books
-yaml
+```yaml
 {
   "_id": ObjectId("88abc190ef0288abc190ef55"),
   "title": "How to win friends and influence people",
@@ -198,10 +198,10 @@ yaml
   "createdAt": "2021-09-17T04:25:07.803Z",
   "updatedAt": "2021-09-17T04:25:07.803Z",
 }
-
+```
 
 ### reviews
-yaml
+```yaml
 {
   "_id": ObjectId("88abc190ef0288abc190ef88"),
   bookId: ObjectId("88abc190ef0288abc190ef55"),
@@ -210,11 +210,11 @@ yaml
   rating: 4,
   review: "An exciting nerving thriller. A gripping tale. A must read book."
 }
-
+```
 
 ## Response examples
 ### Get books response
-yaml
+```yaml
 {
   status: true,
   message: 'Books list',
@@ -239,10 +239,10 @@ yaml
     }
   ]
 }
-
+```
 
 ### Book details response
-yaml
+```yaml
 {
   status: true,
   message: 'Books list',
@@ -252,7 +252,7 @@ yaml
     "excerpt": "book body",
     "userId": ObjectId("88abc190ef0288abc190ef02")
     "category": "Book",
-    "subcategory": ["Non fiction", "Self Help"],
+    "subcategory": "Non fiction",
     "isDeleted": false,
     "reviews": 4,
     "releasedAt": "2021-09-17T04:25:07.803Z"
@@ -294,10 +294,10 @@ yaml
     ]
   }
 }
-
+```
 
 ### Book details response no reviews
-yaml
+```yaml
 {
   status: true,
   message: 'Books list',
@@ -307,7 +307,7 @@ yaml
     "excerpt": "book body",
     "userId": ObjectId("88abc190ef0288abc190ef02")
     "category": "Book",
-    "subcategory": "Non fiction", "Self Help"],
+    "subcategory": "Non fiction",
     "isDeleted": false,
     "reviews": 0,
     "releasedAt": "2021-09-17"
@@ -316,3 +316,4 @@ yaml
     "reviewsData": []
   }
 }
+```
