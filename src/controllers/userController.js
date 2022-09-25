@@ -14,7 +14,7 @@ const registerUser = async function (req, res) {
 
     //===================================== if Empty Body ========================================
     if (!validation.isValidRequestBody(requestBody)) {
-      return res.status(400).send({ status: false, message: "user data is required to create a new user" });
+      return res.status(400).send({ status: false, message: "Invalid request params please provide some data" });
     }
     //========================================== if Title missing & not Valid============================
     if (!validation.isValid(title)) {
@@ -41,7 +41,7 @@ const registerUser = async function (req, res) {
     if (isPhoneUnique) {
       return res.status(400).send({ status: false, message: `mobile number: ${phone} already exist`, });
     }
-    //================================ If Email Missing and Not Valid and ALready exists =========================
+    //========================= If Email Missing and Not Valid and ALready exists ====================
     if (!validation.isValid(email)) {
       return res.status(400).send({ status: false, message: "email address is required" });
     }
@@ -97,6 +97,7 @@ const userLogin = async function (req, res) {
     const token = await jwt.sign({
       userId: loginUser._id, group: "group20", iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 20 * 60 * 60
+      
     }, "project3group20");
     // -------------------------Set header------------------------
     res.setHeader("x-api-key", token);

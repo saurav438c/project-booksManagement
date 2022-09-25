@@ -116,7 +116,7 @@ const getBook = async function (req, res) {
 
 }
 
-// ================================================Get books reviews =============================================
+// ================================================Get books reviews ======================================
 
 const getReviewsBook = async function (req, res) {
     try {
@@ -143,7 +143,7 @@ const getReviewsBook = async function (req, res) {
     }
 
 }
-//===================================================Update Book By bookId======================
+//==============================Update Book By bookId======================
 const updateBook = async function (req, res) {
     try {
 
