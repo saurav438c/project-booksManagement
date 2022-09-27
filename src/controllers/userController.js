@@ -20,7 +20,7 @@ const registerUser = async function (req, res) {
     if (!validation.isValid(title)) {
       return res.status(400).send({ status: false, message: `title is required` });
     }
-    if (!validation.isValidTitle(title)) return res.status(400).send({ status: false, msg: "title only take mrs , mr , miss" })
+    if (!validation.isValidTitle(title)) return res.status(400).send({ status: false, msg: "title only take Mrs , Mr , Miss" })
     //================================================= If Name Missing and Not Valid =========================
     if (!validation.isValid(name)) {
       return res.status(400).send({ status: false, message: `name is required ` });
@@ -102,7 +102,7 @@ const userLogin = async function (req, res) {
     // -------------------------Set header------------------------
     res.setHeader("x-api-key", token);
     //------------------------------ Successful Token generated ----------------------------------------
-    res.status(200).send({ status: true, msg: "user successfully loged in ", data: { token } })
+    res.status(200).send({ status: true, msg: "user successfully logged in ", data: { token } })
 
   } catch (err) {
     return res.status(500).send({ status: false, msg: err.message })
